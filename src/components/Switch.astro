@@ -1,0 +1,108 @@
+---
+  import { uuid } from '../utils/id.ts'
+
+  export interface Props {
+    label: string;
+    checked?: boolean;
+    value?: string;
+    required?: boolean;
+    disabled?: boolean;
+    class?: string;
+    id?: string;
+  }
+
+  const {
+    label,
+    checked = false,
+    value = 'on',
+    required = false,
+    disabled = false,
+    class: className = 'astro-switch',
+    id = uuid()
+  } = Astro.props as Props
+---
+
+<div class={className}>
+  <label for={id}>{label}</label>
+
+  <button
+    type="button"
+    role="switch"
+    id={id}
+    aria-checked={checked}
+    aria-required={required}
+    disabled={disabled}
+    value={value}
+  >
+    <span />
+  </button>
+
+  <input
+    class="sr-only"
+    type="checkbox"
+    aria-hidden
+    tabindex="-1"
+  />
+</div>
+
+<script define:vars={{className}}>
+  function init(elem) {
+    const buttonElem = elem.querySelector('button')
+    const inputElem = elem.querySelector("[type='checkbox']")
+
+    buttonElem.addEventListener('click', function() {
+      inputElem.checked = !inputElem.checked;
+      buttonElem.setAttribute('aria-checked', inputElem.checked)
+    })
+  }
+
+  Array.from(document.querySelectorAll(`.${className}`)).map(init);
+</script>
+
+<style>
+  div {
+    display: flex;
+    align-items: center;
+    margin: 1em 0;
+  }
+
+  label {
+    margin: 0;
+    padding-right: 1em;
+  }
+
+  button {
+    all: unset;
+    width: 42px;
+    height: 25px;
+    background-color: rgba(0, 0, 0, 0.44);
+    border-radius: 9999px;
+    position: relative;
+    box-shadow: 0 2px 4px #303030;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
+  span {
+    display: block;
+    width: 21px;
+    height: 21px;
+    background-color: white;
+    border-radius: 9999px;
+    box-shadow: 0 2px 2px #303030;
+    transition: transform 100ms;
+    transform: translateX(2px);
+    will-change: transform;
+  }
+
+  button:focus {
+    box-shadow: 0 0 0 2px black;
+  }
+
+  button[aria-checked="true"] {
+    background-color: black;
+  }
+
+  button[aria-checked="true"] span {
+    transform: translateX(19px);
+  }
+</style>

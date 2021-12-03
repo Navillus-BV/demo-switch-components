@@ -1,0 +1,107 @@
+---
+import XElement from 'astro-xelement';
+  import { uuid } from '../utils/id.ts'
+
+export interface Props {
+	label: string;
+	checked?: boolean;
+	value?: string;
+	required?: boolean;
+	disabled?: boolean;
+    class?: string;
+	id?: string;
+}
+
+const {
+	label,
+	checked = false,
+	value = 'on',
+	required = false,
+	disabled = false,
+    class: className = 'astro-switch',
+    id = uuid()
+} = Astro.props as Props;
+
+const { Button, Input, Label } = XElement;
+---
+<div class={className}>
+    <Label for={id}>{label}</Label>
+
+    <Button
+	type="button"
+	role="switch"
+    id={id}
+	aria-checked={checked}
+	aria-required={required}
+	disabled={disabled}
+	value={value}
+	@do={(element, store) => {
+		store.button = element
+	}}
+	@click={(event, store) => {
+		store.button.setAttribute('aria-checked', store.checkbox.checked = !store.checkbox.checked)
+	}}
+><span /></Button>
+
+<Input
+	type="checkbox"
+	aria-hidden
+    class="sr-only"
+	tabindex="-1"
+	@do={(element, store) => {
+		store.checkbox = element
+	}}
+	@input={(event, store) => {
+		store.button.setAttribute('aria-checked', store.checkbox.checked)
+	}}
+/>
+</div>
+
+
+<style>
+  div {
+    display: flex;
+    align-items: center;
+    margin: 1em 0;
+  }
+
+  label {
+    margin: 0;
+    padding-right: 1em;
+  }
+
+  button {
+    all: unset;
+    width: 42px;
+    height: 25px;
+    background-color: rgba(0, 0, 0, 0.44);
+    border-radius: 9999px;
+    position: relative;
+    box-shadow: 0 2px 4px #303030;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
+  span {
+    display: block;
+    width: 21px;
+    height: 21px;
+    background-color: white;
+    border-radius: 9999px;
+    box-shadow: 0 2px 2px #303030;
+    transition: transform 100ms;
+    transform: translateX(2px);
+    will-change: transform;
+  }
+
+  button:focus {
+    box-shadow: 0 0 0 2px black;
+  }
+
+  button[aria-checked="true"] {
+    background-color: black;
+  }
+
+  button[aria-checked="true"] span {
+    transform: translateX(19px);
+  }
+</style>
