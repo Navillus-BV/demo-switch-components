@@ -1,8 +1,5 @@
 ---
 import '../assets/global.scss';
-import AstroSwitch from '../components/Switch.astro';
-import SvelteSwitch from '../components/Switch.svelte';
-import XSwitch from '../components/XSwitch.astro';
 ---
 
 <html lang="en" data-chisel-theme="light">
@@ -15,11 +12,19 @@ import XSwitch from '../components/XSwitch.astro';
 </head>
 
 <body>
-	<h1>Welcome to <a href="https://astro.build/">Astro</a></h1>
+	<h1>Comparing component hydration</h1>
 
-	<SvelteSwitch label='Airplane mode' client:idle />
-	<AstroSwitch label='Airplane mode' />
-	<XSwitch label='Airplane mode' />
+	<ul>
+		<li>
+			<a href='/astro'>Astro component demo</a>
+		</li>
+		<li>
+			<a href='/svelte'>Svelte component demo</a>
+		</li>
+		<li>
+			<a href='/xelement'>XElement component demo</a>
+		</li>
+	</ul>
 </body>
 
 </html>
